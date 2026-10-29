@@ -106,7 +106,8 @@ export function GenerateStep() {
   useEffect(() => {
     if (!provider) return;
     const known = provider.models.some((m) => m.id === model);
-    if (!model || (!provider.allowCustomModel && !known)) setValue("model", provider.defaultModel);
+    const fromOtherProvider = providers?.providers.some((p) => p.id !== provider.id && p.models.some((m) => m.id === model));
+    if (!model || fromOtherProvider || (provider.models.length > 0 && !known)) setValue("model", provider.defaultModel);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [providerId, provider]);
 
