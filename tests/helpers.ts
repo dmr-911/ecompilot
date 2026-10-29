@@ -42,6 +42,8 @@ export function testConfig(over: Partial<AppConfig> = {}): AppConfig {
     modelPricingJson: "",
     storageDriver: "none",
     storageDir: ".data/test",
+    databaseUrl: "",
+    storageAutoMigrate: true,
     ...over,
   };
 }

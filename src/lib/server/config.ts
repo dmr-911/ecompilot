@@ -35,7 +35,10 @@ export function getConfig() {
     maxUploadBytes: int("MAX_UPLOAD_BYTES", 5 * 1024 * 1024, 1024, 50 * 1024 * 1024),
     maxOutputTokens: int("MAX_OUTPUT_TOKENS", 16000, 1000, 64000),
     modelPricingJson: process.env.MODEL_PRICING_JSON ?? "",
-    storageDriver: (process.env.STORAGE_DRIVER ?? "none") as "none" | "memory" | "file",
+    storageDriver: (process.env.STORAGE_DRIVER ?? (process.env.DATABASE_URL ? "neon" : "none")) as "none" | "memory" | "file" | "neon",
+    databaseUrl: process.env.DATABASE_URL ?? "",
+    /** Create the workspaces table on first use. Set false if you run `npm run db:migrate` yourself. */
+    storageAutoMigrate: bool("STORAGE_AUTO_MIGRATE", true),
     storageDir: process.env.STORAGE_DIR ?? ".data/workspaces",
   };
 }

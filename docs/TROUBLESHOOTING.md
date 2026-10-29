@@ -42,4 +42,6 @@
 | Problem | Fix |
 | --- | --- |
 | "Browser storage is full" | Export, then delete old workspaces on the Import step. For large catalogues, use server storage. |
-| Work doesn't resume | Private windows don't keep browser storage. Check that saving is on in Settings. |
+| Work doesn't resume | Private windows don't keep browser storage. Check that saving is on in Settings. With Neon, the workspace is tied to the browser's anonymous cookie, so another browser won't see it. |
+| "Could not reach workspace storage" | The server can't reach Neon. Check `DATABASE_URL`, that the Neon project isn't suspended or out of quota, and that the host allows outbound HTTPS. |
+| `relation "listingpilot_workspaces" does not exist` | `STORAGE_AUTO_MIGRATE=false` but the migration hasn't run. Run `npm run db:migrate`. |

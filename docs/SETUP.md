@@ -30,7 +30,9 @@ All settings are environment variables. See [`.env.example`](../.env.example) fo
 | `MAX_PRODUCTS_PER_JOB` | 500 | Largest job a customer can start. |
 | `GENERATION_CONCURRENCY` | 3 | Parallel provider calls per request. |
 | `RATE_LIMIT_PER_MINUTE` | 20 | Generate requests per client IP per minute. |
-| `STORAGE_DRIVER` | `none` | `none` (browser storage), `file` (JSON on disk), or `memory`. |
+| `DATABASE_URL` | none | Neon Postgres connection string. When set, workspaces are saved in Neon. |
+| `STORAGE_DRIVER` | `neon` if `DATABASE_URL` is set, else `none` | `neon`, `none` (browser storage), `file` (JSON on disk), or `memory`. |
+| `STORAGE_AUTO_MIGRATE` | `true` | Create the Neon table on first use. Set `false` if you run `npm run db:migrate` yourself. |
 
 ## Production build
 
@@ -76,19 +78,38 @@ For `STORAGE_DRIVER=file`, mount a volume at `STORAGE_DIR`.
 The app works on serverless platforms with two caveats:
 
 - The rate limiter and `memory` storage are per instance. For real limits across instances, implement `RateLimiter` (`src/lib/server/rate-limit.ts`) on a shared store such as Redis, and pass it in `src/lib/server/deps.ts`.
-- `file` storage needs a persistent disk. On serverless, keep the default browser storage or implement `ServerWorkspaceStore` (`src/lib/storage/server-store.ts`) on a database.
+- `file` storage needs a persistent disk. On serverless, use Neon (`DATABASE_URL`) or the default browser storage.
 
 `/api/generate` declares `maxDuration = 300` seconds. On plans with a lower limit, lower `MAX_BATCH_SIZE` so a batch finishes in time.
 
-## Adding a database
+## Database (Neon Postgres)
 
-The UI talks to `WorkspaceRepository` and the server to `ServerWorkspaceStore`. To use Postgres, SQLite or similar:
+Saved workspaces are stored in [Neon](https://neon.com) when `DATABASE_URL` is set. Without it, work is saved in each customer's browser.
 
-1. Implement `ServerWorkspaceStore` (four methods: `list`, `get`, `put`, `delete`, all scoped by owner).
-2. Construct it in `src/lib/server/deps.ts` for a new `STORAGE_DRIVER` value.
-3. When you add authentication, pass the signed-in user id as the owner instead of the anonymous cookie in `src/lib/server/workspace-handlers.ts`.
+1. Create a Neon project, then open **Connect** in the Neon console and copy the connection string. The pooled string (host contains `-pooler`) is a good default.
+2. Set it on the server:
 
-Nothing else changes.
+   ```bash
+   DATABASE_URL="postgresql://user:password@ep-xxxx-pooler.region.aws.neon.tech/neondb?sslmode=require"
+   ```
+
+3. Create the table. Either let the app do it on first use (default, `STORAGE_AUTO_MIGRATE=true`), or run the migration as a deploy step and set `STORAGE_AUTO_MIGRATE=false`:
+
+   ```bash
+   DATABASE_URL=... npm run db:migrate
+   ```
+
+   Migrations live in `db/migrations/`. The schema is one table, `listingpilot_workspaces`, with a JSONB document per workspace, keyed by owner and workspace id.
+
+4. Open the app, import some products, reload: the workspace appears under **Resume saved work**, marked "Saved on the server".
+
+The app talks to Neon over HTTPS with `@neondatabase/serverless`, so it works on serverless and edge hosts without a connection pool. If Neon is unreachable, saving shows "Not saved" and the work stays in the open tab; nothing is lost until the tab is closed.
+
+Each browser gets an anonymous owner id in an httpOnly cookie, and workspaces are only visible to that owner. When you add authentication, pass the signed-in user id as the owner in `src/lib/server/workspace-handlers.ts` instead.
+
+### Using another database
+
+The UI talks to `WorkspaceRepository` and the server to `ServerWorkspaceStore`. The Postgres store (`src/lib/storage/postgres-store.ts`) only needs a `SqlClient` with a `query(text, params)` method, so any Postgres (node-postgres, Supabase, RDS) takes a few lines in `src/lib/storage/neon.ts`. For a non-Postgres database, implement `ServerWorkspaceStore` (`list`, `get`, `put`, `delete`, all scoped by owner) and construct it in `src/lib/server/deps.ts`.
 
 ## Verifying a deployment
 

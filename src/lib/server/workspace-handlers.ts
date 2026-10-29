@@ -22,20 +22,33 @@ function withOwnerCookie(res: Response, setCookie?: string) {
   return res;
 }
 
+function storageFailed() {
+  return apiError(503, "storage_unavailable", "Could not reach workspace storage. Your work is still in this tab; try again shortly.");
+}
+
 function disabled() {
-  return apiError(404, "storage_disabled", "Server storage is not enabled. Set STORAGE_DRIVER=file to enable it.");
+  return apiError(404, "storage_disabled", "Server storage is not enabled. Set DATABASE_URL (Neon) or STORAGE_DRIVER=file to enable it.");
 }
 
 export async function handleListWorkspaces(request: Request, store: ServerWorkspaceStore | null) {
   if (!store) return disabled();
   const o = owner(request);
-  return withOwnerCookie(json({ workspaces: await store.list(o.id) }), o.setCookie);
+  try {
+    return withOwnerCookie(json({ workspaces: await store.list(o.id) }), o.setCookie);
+  } catch {
+    return storageFailed();
+  }
 }
 
 export async function handleGetWorkspace(request: Request, store: ServerWorkspaceStore | null, id: string) {
   if (!store) return disabled();
   const o = owner(request);
-  const w = await store.get(o.id, id).catch(() => null);
+  let w;
+  try {
+    w = await store.get(o.id, id);
+  } catch {
+    return storageFailed();
+  }
   if (!w) return withOwnerCookie(apiError(404, "not_found", "Workspace not found."), o.setCookie);
   return withOwnerCookie(json(w), o.setCookie);
 }
@@ -48,10 +61,11 @@ export async function handlePutWorkspace(request: Request, store: ServerWorkspac
   if (!read.ok) return read.response;
   const parsed = workspaceShapeSchema.safeParse(read.body);
   if (!parsed.success || parsed.data.id !== id) return apiError(400, "invalid_workspace", "Workspace data is invalid.");
+  if (!/^[A-Za-z0-9_-]{1,100}$/.test(id)) return apiError(400, "invalid_workspace", "Workspace id is invalid.");
   try {
     await store.put(o.id, parsed.data as unknown as Workspace);
   } catch {
-    return apiError(400, "invalid_workspace", "Workspace id is invalid.");
+    return storageFailed();
   }
   return withOwnerCookie(json({ ok: true }), o.setCookie);
 }
@@ -60,6 +74,10 @@ export async function handleDeleteWorkspace(request: Request, store: ServerWorks
   if (!store) return disabled();
   if (!sameOrigin(request)) return apiError(403, "forbidden", "Cross-site request rejected.");
   const o = owner(request);
-  await store.delete(o.id, id).catch(() => undefined);
+  try {
+    await store.delete(o.id, id);
+  } catch {
+    return storageFailed();
+  }
   return withOwnerCookie(json({ ok: true }), o.setCookie);
 }
