@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Field, Input, Textarea } from "@/components/ui";
 import { PRODUCT_FIELDS, type ProductFields } from "@/lib/products/fields";
-import { emptyFormValues, productFieldsSchema, type ProductFormValues } from "@/lib/products/schema";
+import { emptyFormValues, productFieldsSchema } from "@/lib/products/schema";
 import type { z } from "zod";
 
 const LONG_FIELDS = new Set(["specifications", "description", "features", "materials"]);
@@ -20,7 +20,7 @@ export function ProductEditor({
   onCancel: () => void;
   submitLabel?: string;
 }) {
-  const form = useForm<ProductFormValues, unknown, z.output<typeof productFieldsSchema>>({
+  const form = useForm<z.input<typeof productFieldsSchema>, unknown, z.output<typeof productFieldsSchema>>({
     resolver: zodResolver(productFieldsSchema),
     defaultValues: { ...emptyFormValues(), ...initial },
     mode: "onBlur",

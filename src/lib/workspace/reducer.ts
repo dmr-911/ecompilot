@@ -11,7 +11,7 @@ import { runQualityChecks } from "../quality/checks";
 import type { ProviderId } from "../ai/types";
 import type { Workspace } from "../storage/types";
 
-export type StepId = "import" | "map" | "products" | "generate" | "review" | "export";
+export type StepId = "import" | "map" | "products" | "generate" | "review" | "export" | "settings";
 
 export interface ImportState extends ParsedCsv {
   fileName?: string;

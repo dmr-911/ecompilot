@@ -187,7 +187,7 @@ export function ProductsStep() {
         </div>
       ) : null}
 
-      <Drawer open={editing !== null} title={editing === "new" ? "Add product" : `Edit row ${editing && editing !== "new" ? editing.sourceRow || "" : ""}`} onClose={() => setEditing(null)}>
+      <Drawer open={editing !== null} title={editing === "new" ? "Add product" : editing?.sourceRow ? `Edit row ${editing.sourceRow}` : "Edit product"} onClose={() => setEditing(null)}>
         {editing && editing !== "new" && editing.issues.length > 0 ? (
           <div className="mb-4">
             <Alert tone={editing.issues.some((i) => i.severity === "error") ? "red" : "amber"} title="Data checks">

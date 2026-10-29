@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import { useWorkspace } from "./context";
 import { api, ApiError } from "./api";
 import { chunk } from "@/lib/generation/batching";
+import type { Workspace } from "@/lib/storage/types";
 
 export interface RunProgress {
   total: number;
@@ -31,8 +32,8 @@ export function useGenerationRunner() {
   const cancel = useCallback(() => abortRef.current?.abort(), []);
 
   const run = useCallback(
-    async (ids: string[]) => {
-      const ws = state.workspace;
+    async (ids: string[], overrides: Partial<Pick<Workspace, "options" | "provider" | "model">> = {}) => {
+      const ws = { ...state.workspace, ...overrides };
       const byId = new Map(ws.products.map((p) => [p.id, p]));
       const items = ids
         .map((id) => byId.get(id))

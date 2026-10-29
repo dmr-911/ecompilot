@@ -64,7 +64,7 @@ export function demoListing(prompt: string, system: string) {
   const faqs = specs
     .filter((s) => s.key)
     .slice(0, faqMax)
-    .map((s) => ({ question: `What is the ${s.key.toLowerCase()} of the ${name}?`, answer: sentence(s.value) }));
+    .map((s) => ({ question: `${s.key}: what does the ${name} offer?`, answer: sentence(`${s.key}: ${s.value}`) }));
 
   const missing: string[] = [];
   if (!dimensions && !specs.some((s) => /dimension|size/i.test(s.key))) missing.push("Dimensions");
