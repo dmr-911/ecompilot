@@ -11,7 +11,7 @@ Generate ── POST /api/estimate ──────────────▶
                                                    └─ ai/<provider> adapter ─▶ AI API
 Review (quality flags, edits) ◀── results ─── quality/checks
 Export (export/registry adapters, csv/serialize)
-Save ── WorkspaceRepository ─▶ localStorage, or /api/workspaces ▶ ServerWorkspaceStore
+Save ── WorkspaceRepository ─▶ localStorage, or /api/workspaces ▶ ServerWorkspaceStore ▶ Neon Postgres
 ```
 
 ## Modules
@@ -25,7 +25,7 @@ Save ── WorkspaceRepository ─▶ localStorage, or /api/workspaces ▶ Serv
 | `lib/quality` | Deterministic checks on generated output | products, prompts, export |
 | `lib/generation` | Options schema, batching, per-item retry and fatal-error handling | ai, prompts, quality |
 | `lib/export` | Marketplace profiles: constraints, prompt guidance, CSV layout | csv |
-| `lib/storage` | Workspace persistence interfaces and implementations | products |
+| `lib/storage` | Workspace persistence interfaces; browser, file and Postgres (Neon) implementations | products |
 | `lib/server` | Config, key vault, rate limiting, HTTP helpers, route handler logic | everything above |
 | `lib/workspace` | Pure reducer for UI state | csv, quality |
 | `components/workspace` | Step UIs, context, generation runner | lib |

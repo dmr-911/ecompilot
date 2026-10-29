@@ -111,8 +111,8 @@ export function SettingsStep() {
               </label>
               <p className="text-slate-600">
                 {repository.kind === "server"
-                  ? "Workspaces are stored on this server and tied to this browser by an anonymous cookie."
-                  : "Workspaces are stored in this browser only. Clearing site data deletes them. Your operator can enable server storage with STORAGE_DRIVER=file."}
+                  ? "Workspaces are stored in the server database and tied to this browser by an anonymous cookie."
+                  : "Workspaces are stored in this browser only. Clearing site data deletes them. Your operator can enable server storage (Neon Postgres) by setting DATABASE_URL."}
               </p>
               {saveState === "error" ? <Alert tone="red">{saveError}</Alert> : null}
             </>

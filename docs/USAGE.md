@@ -77,4 +77,4 @@ Pick an export profile and whether to include only approved listings. A preview 
 
 ## Saving and resuming
 
-Work is saved automatically, in the browser by default or on the server if the operator set `STORAGE_DRIVER=file`. Saved workspaces are listed on the Import step. Turn saving off in Settings.
+Work is saved automatically: in the Neon database when the operator set `DATABASE_URL`, otherwise in the browser. Saved workspaces are listed on the Import step. Turn saving off in Settings.
