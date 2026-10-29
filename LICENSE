@@ -1,0 +1,85 @@
+LISTINGPILOT AI COMMERCIAL SOFTWARE LICENSE AGREEMENT (TEMPLATE)
+
+THIS IS A TEMPLATE. It is not legal advice. Have a qualified lawyer in your
+jurisdiction review and adapt it before you use it. Replace every [BRACKETED]
+placeholder.
+
+Copyright (c) [YEAR] [LICENSOR LEGAL NAME]. All rights reserved.
+
+1. PARTIES
+This Agreement is between [LICENSOR LEGAL NAME], [ADDRESS] ("Licensor") and the
+person or entity that purchases a license ("Licensee").
+
+2. DEFINITIONS
+"Software" means ListingPilot AI, including source code, object code,
+documentation, prompt templates, example files and updates provided by Licensor.
+"Edition" means the license tier purchased, as listed in the order form:
+  (a) Single Business: use by one legal entity for its own products.
+  (b) Agency: use by one legal entity to provide services to its clients.
+  (c) SaaS / White-label: hosting the Software as a service for third parties.
+"Seat" or "Site" means the usage unit stated in the order form.
+
+3. LICENSE GRANT
+Subject to payment and to this Agreement, Licensor grants Licensee a
+non-exclusive, non-transferable, [perpetual / term-limited to N months] license
+to install, use and modify the Software within the scope of the purchased
+Edition.
+
+4. RESTRICTIONS
+Licensee shall not:
+  (a) resell, sublicense, or redistribute the Software or its source code,
+      except as allowed by a SaaS / White-label Edition;
+  (b) remove copyright or license notices;
+  (c) use the Software beyond the purchased Edition, Seats or Sites;
+  (d) use the Software to create a competing listing-generation product for
+      sale, unless the SaaS / White-label Edition allows it.
+
+5. THIRD-PARTY SERVICES AND COSTS
+The Software connects to third-party AI providers selected and configured by
+Licensee. Licensee is solely responsible for its agreements with those
+providers, for complying with their terms and usage policies, and for all fees
+they charge. Usage estimates shown by the Software are approximations and are
+not a quote or a guarantee of cost.
+
+6. GENERATED CONTENT
+Licensee is responsible for reviewing all generated content before publishing
+it, and for its accuracy and compliance with marketplace rules, consumer
+protection, advertising and product-safety laws. The Software's quality checks
+are aids and do not guarantee that content is accurate, complete, or lawful.
+
+7. OPEN-SOURCE COMPONENTS
+The Software includes open-source components licensed under their own terms
+(see package.json and each package's license). Those terms govern those
+components.
+
+8. SUPPORT AND UPDATES
+[Describe support channel, response times and update period, e.g. "12 months of
+updates and email support from the purchase date."]
+
+9. FEES
+Fees are as stated in the order form and are non-refundable except [REFUND
+POLICY].
+
+10. WARRANTY DISCLAIMER
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NON-INFRINGEMENT, TO THE MAXIMUM EXTENT PERMITTED BY LAW.
+
+11. LIMITATION OF LIABILITY
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, LICENSOR'S TOTAL LIABILITY UNDER THIS
+AGREEMENT IS LIMITED TO THE FEES PAID BY LICENSEE IN THE 12 MONTHS BEFORE THE
+CLAIM. LICENSOR IS NOT LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL OR
+CONSEQUENTIAL DAMAGES, LOST PROFITS, OR THIRD-PARTY PROVIDER FEES.
+
+12. TERMINATION
+This Agreement terminates automatically if Licensee breaches it and does not
+cure the breach within 30 days of notice. On termination Licensee must stop
+using and delete the Software.
+
+13. GOVERNING LAW
+This Agreement is governed by the laws of [JURISDICTION]. Courts of [VENUE]
+have exclusive jurisdiction.
+
+14. ENTIRE AGREEMENT
+This Agreement and the order form are the entire agreement between the parties
+about the Software.

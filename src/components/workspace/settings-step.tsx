@@ -91,7 +91,7 @@ export function SettingsStep() {
           help={
             <>
               Create a key in the{" "}
-              <a className="text-indigo-700 underline" href="https://platform.claude.com/settings/keys" target="_blank" rel="noreferrer">
+              <a className="text-indigo-700 underline" href="https://platform.claude.com" target="_blank" rel="noreferrer">
                 Claude Console
               </a>
               .

@@ -68,7 +68,7 @@ export function createAnthropicProvider(opts: AnthropicProviderOptions = {}): AI
       const client = createClient(req.apiKey);
       let response;
       try {
-        response = await client.beta.messages.parse(
+        response = await client.beta.messages.create(
           {
             model: req.model,
             max_tokens: req.maxOutputTokens,
@@ -92,7 +92,14 @@ export function createAnthropicProvider(opts: AnthropicProviderOptions = {}): AI
       if (response.stop_reason === "max_tokens") {
         throw new ProviderError("output_truncated", "The model's output was cut off at the token limit.");
       }
-      const checked = req.schema.safeParse(response.parsed_output);
+      const text = response.content.flatMap((b) => (b.type === "text" ? [b.text] : [])).join("");
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(text);
+      } catch {
+        throw new ProviderError("invalid_output", "The model's output was not valid JSON.");
+      }
+      const checked = req.schema.safeParse(parsed);
       if (!checked.success) {
         throw new ProviderError("invalid_output", "The model's output did not match the listing format.");
       }

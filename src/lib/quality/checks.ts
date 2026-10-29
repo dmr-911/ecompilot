@@ -59,13 +59,17 @@ function numbersIn(text: string): Set<string> {
   return new Set((text.match(NUMBER) ?? []).map(normalizeNumber));
 }
 
+const NO_WORD_SPACES = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}\p{Script=Thai}]/u;
+
 /** Case-insensitive phrase search that respects word boundaries where the phrase starts/ends with a letter or digit. */
 export function containsPhrase(haystack: string, phrase: string): boolean {
   const p = phrase.trim();
   if (!p) return false;
   const escaped = p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+");
-  const start = /^[\p{L}\p{N}]/u.test(p) ? "(?<![\\p{L}\\p{N}])" : "";
-  const end = /[\p{L}\p{N}]$/u.test(p) ? "(?![\\p{L}\\p{N}])" : "";
+  // Scripts written without spaces between words (CJK, Thai) get no boundary check.
+  const needsBoundary = (ch: string) => /[\p{L}\p{N}]/u.test(ch) && !NO_WORD_SPACES.test(ch);
+  const start = needsBoundary(p[0]) ? "(?<![\\p{L}\\p{N}])" : "";
+  const end = needsBoundary(p[p.length - 1]) ? "(?![\\p{L}\\p{N}])" : "";
   return new RegExp(`${start}${escaped}${end}`, "iu").test(haystack);
 }
 
